@@ -3,10 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My GitHub Page</title>
+    <title>NoClip Competitive</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #222;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .content {
+            padding: 20px;
+        }
+        .logos img {
+            width: 100px;
+            margin: 10px;
+        }
+        .discord-login {
+            margin-top: 20px;
+        }
+        .admin-tab {
+            display: none;
+            margin-top: 20px;
+            background-color: #333;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My GitHub Page!</h1>
-    <p>This is my first GitHub Pages website.</p>
+    <nav>
+        <div>NoClip Competitive</div>
+        <div>
+            <a href="#home">Home</a>
+            <a href="#rules">Rules</a>
+            <a href="#hall-of-fame">Hall of Fame</a>
+            <a href="#off-season">Off-Season</a>
+            <a href="#schedule">Schedules</a>
+        </div>
+        <button id="login-btn">Log in with Discord</button>
+    </nav>
+
+    <div class="content">
+        <h1>Logos'</h1>
+        <div class="logos">
+            <img src="logo1.png" alt="Logo 1">
+            <img src="logo2.png" alt="Logo 2">
+            <img src="logo3.png" alt="Logo 3">
+        </div>
+
+        <div class="discord-login">
+            <p id="login-status">You are not logged in.</p>
+        </div>
+    </div>
+
+    <div class="admin-tab" id="admin-tab">
+        <h2>Logged-In Users</h2>
+        <ul id="user-list"></ul>
+    </div>
+
+    <script>
+        const clientId = 'YOUR_DISCORD_CLIENT_ID';
+        const redirectUri = 'YOUR_REDIRECT_URI'; // Replace with your server's redirect URI
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
+            window.location.href = discordOAuthUrl;
+        });
+
+        // Check for access token in URL
+        window.onload = () => {
+            const hash = window.location.hash;
+            if (hash.startsWith('#access_token')) {
+                const params = new URLSearchParams(hash.substring(1));
+                const accessToken = params.get('access_token');
+
+                // Fetch user data from Discord API
+                fetch('https://discord.com/api/users/@me', {
+                    headers: { Authorization: `Bearer ${accessToken}` }
+                })
+                    .then(response => response.json())
+                    .then(user => {
+                        document.getElementById('login-status').innerText = `Logged in as ${user.username}#${user.discriminator}`;
+                        document.getElementById('admin-tab').style.display = 'block';
+
+                        const userList = document.getElementById('user-list');
+                        const userItem = document.createElement('li');
+                        userItem.textContent = `${user.username}#${user.discriminator}`;
+                        userList.appendChild(userItem);
+                    })
+                    .catch(console.error);
+            }
+        };
+    </script>
 </body>
 </html>
