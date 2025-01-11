@@ -109,8 +109,8 @@
         #dropdown-menu a:hover {
             background-color: #444;
         }
-        #user-container:hover #dropdown-menu,
-        #dropdown-menu:hover {
+        /* Show dropdown when it has the 'active' class */
+        #dropdown-menu.active {
             display: block;
         }
         .mods-title {
@@ -201,6 +201,19 @@
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.pathname);
         }
+
+        // Toggle the dropdown visibility when the avatar is clicked
+        userAvatar.addEventListener('click', () => {
+            const dropdownMenu = document.getElementById('dropdown-menu');
+            dropdownMenu.classList.toggle('active');  // Toggle the 'active' class
+        });
+
+        // Close the dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!userContainer.contains(event.target)) {
+                document.getElementById('dropdown-menu').classList.remove('active');
+            }
+        });
     </script>
 </body>
 </html>
