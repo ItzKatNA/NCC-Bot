@@ -37,6 +37,28 @@
         .discord-login {
             margin-top: 20px;
         }
+        .discord-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #5865F2;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .discord-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .discord-button:hover {
+            background-color: #4752c4;
+        }
         .admin-tab {
             display: none;
             margin-top: 20px;
@@ -55,7 +77,10 @@
             <a href="#off-season">Off-Season</a>
             <a href="#schedule">Schedules</a>
         </div>
-        <button id="login-btn">Log in with Discord</button>
+        <a class="discord-button" id="login-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord Logo">
+            Log in with Discord
+        </a>
     </nav>
 
     <div class="content">
@@ -77,8 +102,8 @@
     </div>
 
     <script>
-        const clientId = 'YOUR_DISCORD_CLIENT_ID';
-        const redirectUri = 'YOUR_REDIRECT_URI'; // Replace with your server's redirect URI
+        const clientId = '1303232811557322793';
+        const redirectUri = 'https://itzkatna.github.io/NCC-Bot/'; // Replace with your server's redirect URI
 
         document.getElementById('login-btn').addEventListener('click', () => {
             const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
