@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoClip Competitive</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', Arial, sans-serif;
             background-color: black;
             color: white;
             text-align: center;
@@ -23,6 +25,7 @@
             color: white;
             text-decoration: none;
             margin: 0 10px;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
         nav a:hover {
             text-decoration: underline;
@@ -35,11 +38,12 @@
         }
         .message-section {
             text-align: left;
-            width: 300px; /* Square dimensions */
+            width: 300px;
             height: 300px;
-            border: 1px solid white; /* Optional border */
+            border: 1px solid white;
             padding: 10px;
-            overflow: auto; /* Scroll if content exceeds size */
+            overflow: auto;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
         .vertical-line {
             width: 2px;
@@ -61,6 +65,7 @@
             padding: 10px 20px;
             cursor: pointer;
             text-decoration: none;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
         .discord-button img {
             width: 20px;
@@ -92,12 +97,14 @@
             padding: 10px;
             text-align: left;
             z-index: 10;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
         #dropdown-menu a {
             color: white;
             text-decoration: none;
             display: block;
             padding: 5px;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
         #dropdown-menu a:hover {
             background-color: #444;
@@ -111,6 +118,7 @@
             font-weight: bold;
             margin-bottom: 10px;
             text-decoration: underline;
+            font-family: 'Montserrat', Arial, sans-serif;
         }
         @media (hover: none) {
             #user-avatar:active + #dropdown-menu {
@@ -152,8 +160,8 @@
     </div>
 
     <script>
-        const clientId = '1303232811557322793'; // Replace with your actual Discord client ID
-        const redirectUri = 'https://itzkatna.github.io/NCC-Bot/'; // Replace with your actual redirect URI
+        const clientId = '1303232811557322793';
+        const redirectUri = 'https://itzkatna.github.io/NCC-Bot/';
 
         const loginBtn = document.getElementById('login-btn');
         const userContainer = document.getElementById('user-container');
@@ -178,7 +186,7 @@
                     userContainer.style.display = 'flex';
                     userAvatar.src = user.avatar
                         ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-                        : 'https://cdn.discordapp.com/embed/avatars/0.png'; // Default avatar
+                        : 'https://cdn.discordapp.com/embed/avatars/0.png';
                     welcomeMessage.innerHTML = `Hello <b>${user.username}</b>! I am Kat 👋 
                     <br><br>I have made this Website with my bare hands. I have been working on this ever since I joined <span style="color:red;">No</span><span style="color:white;">Clip</span><span style="color:yellow;">Competitive</span>!
                     <br><br>If you are a random person and have no idea what that server is, we have partnered with the Official NoClipVR Discord server. Let us be a badge to them! For more info, go to the <b>NoClip Competitive</b> tab at the top!`;
