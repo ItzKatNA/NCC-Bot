@@ -35,7 +35,11 @@
         }
         .message-section {
             text-align: left;
-            max-width: 50%;
+            width: 300px; /* Square dimensions */
+            height: 300px;
+            border: 1px solid white; /* Optional border */
+            padding: 10px;
+            overflow: auto; /* Scroll if content exceeds size */
         }
         .vertical-line {
             width: 2px;
@@ -98,7 +102,8 @@
         #dropdown-menu a:hover {
             background-color: #444;
         }
-        #user-container:hover #dropdown-menu {
+        #user-container:hover #dropdown-menu,
+        #dropdown-menu:hover {
             display: block;
         }
         .mods-title {
