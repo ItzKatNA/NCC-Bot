@@ -34,9 +34,6 @@
             width: 100px;
             margin: 10px;
         }
-        .discord-login {
-            margin-top: 20px;
-        }
         .discord-button {
             display: flex;
             align-items: center;
@@ -59,11 +56,20 @@
         .discord-button:hover {
             background-color: #4752c4;
         }
-        .admin-tab {
+        #user-container {
             display: none;
-            margin-top: 20px;
-            background-color: #333;
-            padding: 20px;
+            align-items: center;
+            gap: 10px;
+        }
+        #user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #user-avatar:hover {
+            opacity: 0.8;
+            transition: 0.3s;
         }
     </style>
 </head>
@@ -81,6 +87,10 @@
             <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord Logo">
             Log in with Discord
         </a>
+        <div id="user-container">
+            <img id="user-avatar" src="" alt="User Avatar" title="Log-out">
+            <span id="user-name"></span>
+        </div>
     </nav>
 
     <div class="content">
@@ -90,50 +100,54 @@
             <img src="logo2.png" alt="Logo 2">
             <img src="logo3.png" alt="Logo 3">
         </div>
-
-        <div class="discord-login">
-            <p id="login-status">You are not logged in.</p>
-        </div>
-    </div>
-
-    <div class="admin-tab" id="admin-tab">
-        <h2>Logged-In Users</h2>
-        <ul id="user-list"></ul>
     </div>
 
     <script>
-        const clientId = '1303232811557322793';
-        const redirectUri = 'https://itzkatna.github.io/NCC-Bot/'; // Replace with your server's redirect URI
+        const clientId = '1303232811557322793'; // Replace with your actual Discord client ID
+        const redirectUri = 'https://itzkatna.github.io/NCC-Bot/'; // Replace with your actual redirect URI
 
-        document.getElementById('login-btn').addEventListener('click', () => {
+        const loginBtn = document.getElementById('login-btn');
+        const userContainer = document.getElementById('user-container');
+        const userAvatar = document.getElementById('user-avatar');
+        const userName = document.getElementById('user-name');
+
+        loginBtn.addEventListener('click', () => {
             const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
             window.location.href = discordOAuthUrl;
         });
 
-        // Check for access token in URL
-        window.onload = () => {
-            const hash = window.location.hash;
-            if (hash.startsWith('#access_token')) {
-                const params = new URLSearchParams(hash.substring(1));
-                const accessToken = params.get('access_token');
+        // Check if user is logged in
+        const token = new URLSearchParams(window.location.hash.substring(1)).get('access_token');
 
-                // Fetch user data from Discord API
-                fetch('https://discord.com/api/users/@me', {
-                    headers: { Authorization: `Bearer ${accessToken}` }
+        if (token) {
+            fetch('https://discord.com/api/users/@me', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+                .then(response => response.json())
+                .then(user => {
+                    // Hide the login button
+                    loginBtn.style.display = 'none';
+                    userContainer.style.display = 'flex';
+
+                    // Set user avatar and display name
+                    userAvatar.src = user.avatar
+                        ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+                        : 'https://cdn.discordapp.com/embed/avatars/0.png'; // Default avatar
+                    userName.textContent = user.username;
+
+                    // Log-out functionality
+                    userAvatar.addEventListener('click', () => {
+                        // Clear the token and reload the page
+                        window.location.href = redirectUri;
+                    });
                 })
-                    .then(response => response.json())
-                    .then(user => {
-                        document.getElementById('login-status').innerText = `Logged in as ${user.username}#${user.discriminator}`;
-                        document.getElementById('admin-tab').style.display = 'block';
+                .catch(console.error);
+        }
 
-                        const userList = document.getElementById('user-list');
-                        const userItem = document.createElement('li');
-                        userItem.textContent = `${user.username}#${user.discriminator}`;
-                        userList.appendChild(userItem);
-                    })
-                    .catch(console.error);
-            }
-        };
+        // Optional: Clean up the URL after getting the token
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.pathname);
+        }
     </script>
 </body>
 </html>
