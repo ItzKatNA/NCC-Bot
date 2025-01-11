@@ -30,9 +30,10 @@
         .content {
             padding: 20px;
         }
-        .logos img {
-            width: 100px;
-            margin: 10px;
+        #welcome-message {
+            font-size: 18px;
+            line-height: 1.5;
+            color: white;
         }
         .discord-button {
             display: flex;
@@ -58,6 +59,7 @@
         }
         #user-container {
             display: none;
+            position: relative;
             align-items: center;
             gap: 10px;
         }
@@ -67,9 +69,33 @@
             border-radius: 50%;
             cursor: pointer;
         }
-        #user-avatar:hover {
-            opacity: 0.8;
-            transition: 0.3s;
+        #dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background-color: #333;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: left;
+            z-index: 10;
+        }
+        #dropdown-menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 5px;
+        }
+        #dropdown-menu a:hover {
+            background-color: #444;
+        }
+        #user-container:hover #dropdown-menu {
+            display: block;
+        }
+        @media (hover: none) {
+            #user-avatar:active + #dropdown-menu {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -82,24 +108,24 @@
             <a href="#hall-of-fame">Hall of Fame</a>
             <a href="#off-season">Off-Season</a>
             <a href="#schedule">Schedules</a>
+            <a href="#noclipvr">NoClipVR</a>
+            <a href="#noclip-competitive">NoClip Competitive</a>
         </div>
         <a class="discord-button" id="login-btn">
             <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord Logo">
             Log in with Discord
         </a>
         <div id="user-container">
-            <img id="user-avatar" src="" alt="User Avatar" title="Log-out">
-            <span id="user-name"></span>
+            <img id="user-avatar" src="" alt="User Avatar" title="Log Out">
+            <div id="dropdown-menu">
+                <a href="#" id="logout-btn">Log Out</a>
+            </div>
         </div>
     </nav>
 
     <div class="content">
-        <h1>Logos'</h1>
-        <div class="logos">
-            <img src="logo1.png" alt="Logo 1">
-            <img src="logo2.png" alt="Logo 2">
-            <img src="logo3.png" alt="Logo 3">
-        </div>
+        <h1>Welcome</h1>
+        <p id="welcome-message"></p>
     </div>
 
     <script>
@@ -109,14 +135,14 @@
         const loginBtn = document.getElementById('login-btn');
         const userContainer = document.getElementById('user-container');
         const userAvatar = document.getElementById('user-avatar');
-        const userName = document.getElementById('user-name');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const logoutBtn = document.getElementById('logout-btn');
 
         loginBtn.addEventListener('click', () => {
             const discordOAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=identify`;
             window.location.href = discordOAuthUrl;
         });
 
-        // Check if user is logged in
         const token = new URLSearchParams(window.location.hash.substring(1)).get('access_token');
 
         if (token) {
@@ -125,26 +151,21 @@
             })
                 .then(response => response.json())
                 .then(user => {
-                    // Hide the login button
                     loginBtn.style.display = 'none';
                     userContainer.style.display = 'flex';
-
-                    // Set user avatar and display name
                     userAvatar.src = user.avatar
                         ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
                         : 'https://cdn.discordapp.com/embed/avatars/0.png'; // Default avatar
-                    userName.textContent = user.username;
+                    welcomeMessage.innerHTML = `Hello <b>${user.username}</b>! I am Kat 👋 I have made this Website with my bare hands. I have been working on this ever since I joined <span style="color:red;">No</span><span style="color:white;">Clip</span><span style="color:yellow;">Competitive</span>!
+                    <br><br>If you are a random person and have no idea what that server is, we have partnered with the Official NoClipVR Discord server. Let us be a badge to them! For more info, go to the <b>NoClip Competitive</b> tab at the top!`;
 
-                    // Log-out functionality
-                    userAvatar.addEventListener('click', () => {
-                        // Clear the token and reload the page
+                    logoutBtn.addEventListener('click', () => {
                         window.location.href = redirectUri;
                     });
                 })
                 .catch(console.error);
         }
 
-        // Optional: Clean up the URL after getting the token
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.pathname);
         }
